@@ -1,0 +1,62 @@
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version '3.4.2'
+    id 'io.spring.dependency-management' version '1.1.7'
+}
+
+group = 'com.example'
+version = '0.0.1-SNAPSHOT'
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
+    }
+}
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+//    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-security'
+//    implementation("org.springframework.security:spring-security-oauth2-client:6.2.2")
+    implementation group: 'com.google.guava', name: 'guava', version: '33.2.1-jre'
+
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-thymeleaf'
+    implementation group: 'nz.net.ultraq.thymeleaf', name: 'thymeleaf-layout-dialect'
+
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.postgresql:postgresql'
+    implementation 'org.hibernate.orm:hibernate-spatial'
+
+    compileOnly 'org.projectlombok:lombok'
+//    runtimeOnly 'org.postgresql:postgresql'
+    annotationProcessor 'org.projectlombok:lombok'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.projectlombok:lombok'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+    testAnnotationProcessor 'org.projectlombok:lombok'
+
+    implementation("io.github.cdimascio:dotenv-java:3.0.0")
+
+//    implementation 'io.jsonwebtoken:jjwt-api:0.12.6'
+//    runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.12.6'
+//    runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.12.6' // or 'io.jsonwebtoken:jjwt-gson:0.12.6' for gson
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}
+
+bootRun {
+    environment "DB_PASSWORD", project.findProperty("DB_PASSWORD") ?: ""
+    environment "DB_USERNAME", project.findProperty("DB_USERNAME") ?: ""
+    environment "DB_URL", project.findProperty("DB_URL") ?: ""
+}
